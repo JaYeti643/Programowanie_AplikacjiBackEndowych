@@ -1,4 +1,6 @@
-﻿namespace AppCore.Models;
+﻿using System.Collections.Generic;
+
+namespace AppCore.Models;
 
 public class Company : Contact
 {

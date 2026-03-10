@@ -1,5 +1,7 @@
 ﻿// --- Contact ---
 
+using System;
+using System.Collections.Generic;
 using AppCore.Models;
 
 public abstract record ContactBaseDto

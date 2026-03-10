@@ -1,4 +1,6 @@
-﻿﻿namespace AppCore.Models;
+﻿using System;
+
+ namespace AppCore.Models;
 
 public abstract class EntityBase
 {
