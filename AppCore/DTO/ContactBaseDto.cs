@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using AppCore.Models;
 
+
+
 public abstract record ContactBaseDto
 {
     public Guid Id { get; init; }
@@ -32,7 +34,21 @@ public record PersonDto : ContactBaseDto
     public DateTime? BirthDate { get; init; }
     public Gender Gender { get; init; }
     public Guid? EmployerId { get; init; }
+
+    public static PersonDto FromEntity(Person person) => new()
+    {
+        Id = person.Id,
+        FirstName = person.FirstName,
+        LastName = person.LastName,
+        Position = person.Position,
+        BirthDate = person.BirthDate,
+        Gender = person.Gender,
+        EmployerId = person.Employer?.Id,
+
+    };
+
 }
+
 
 public record CreatePersonDto(
     string FirstName,

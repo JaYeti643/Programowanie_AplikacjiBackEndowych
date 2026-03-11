@@ -9,7 +9,7 @@ namespace Infrastructure.Memory;
 public class MemoryGenericRepository<T>: IGenericRepositoryAsync<T> 
     where T: class 
 {
-    private Dictionary<Guid, T> _data = new();
+    protected Dictionary<Guid, T> _data = new();
     
     public Task<T> FindByIdAsync(Guid id)
     {
@@ -39,7 +39,7 @@ public class MemoryGenericRepository<T>: IGenericRepositoryAsync<T>
             throw new InvalidOperationException("Entity must have a Guid Id property.");
         }
         
-        var id = (Guid)idProperty.GetValue(entity);
+        var id = (Guid)idProperty.GetValue(entity)!;
         if (id == Guid.Empty)
         {
             id = Guid.NewGuid();
@@ -58,7 +58,7 @@ public class MemoryGenericRepository<T>: IGenericRepositoryAsync<T>
             throw new InvalidOperationException("Entity must have a Guid Id property.");
         }
         
-        var id = (Guid)idProperty.GetValue(entity);
+        var id = (Guid)idProperty.GetValue(entity)!;
         if (_data.ContainsKey(id))
         {
             _data[id] = entity;
