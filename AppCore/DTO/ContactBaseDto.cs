@@ -74,7 +74,7 @@ public record UpdatePersonDto(
     AddressDto? Address,
     ContactStatus? Status
 );
-// --- Contact Search ---
+
 public record ContactSearchDto(
     string? Query,
     ContactStatus? Status,
@@ -84,14 +84,16 @@ public record ContactSearchDto(
     int PageSize = 20
 );
 
-// --- PagedResult ---
+
 public record PagedResult<T>(
-    List<T> Items,
+    IEnumerable<T> Items,
     int TotalCount,
     int Page,
     int PageSize
 )
 {
+  
+
     public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
     public bool HasNext => Page < TotalPages;
     public bool HasPrevious => Page > 1;

@@ -42,9 +42,10 @@ public class MemoryGenericRepositoryTest
         await _repo.AddAsync(person2);
 
         var result = await _repo.FindAllAsync();
+        var resultList = result.ToList();
 
-        Assert.Contains(person1, result);
-        Assert.Contains(person2, result);
+        Assert.Contains(person1, resultList);
+        Assert.Contains(person2, resultList);
     }
 
     [Fact]
@@ -57,7 +58,7 @@ public class MemoryGenericRepositoryTest
 
         var pagedResult = await _repo.FindPagedAsync(2, 3);
 
-        Assert.Equal(3, pagedResult.Items.Count);
+        Assert.Equal(3, pagedResult.Items.Count());
         Assert.Equal(2, pagedResult.Page);
         Assert.Equal(3, pagedResult.PageSize);
     }
@@ -84,5 +85,61 @@ public class MemoryGenericRepositoryTest
         var result = await _repo.FindByIdAsync(person.Id);
 
         Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task FindByIdAsyncReturnsNullForNonExistentId()
+    {
+        var result = await _repo.FindByIdAsync(Guid.NewGuid());
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task FindAllAsyncReturnsEmptyWhenNoEntities()
+    {
+        var result = await _repo.FindAllAsync();
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task FindPagedAsyncReturnsEmptyForLargePage()
+    {
+        var pagedResult = await _repo.FindPagedAsync(100, 10);
+        Assert.Empty(pagedResult.Items);
+        Assert.Equal(0, pagedResult.TotalCount);
+    }
+
+    [Fact]
+    public async Task FindPagedAsyncReturnsEmptyForPageSizeZero()
+    {
+        await _repo.AddAsync(new Person { Id = Guid.NewGuid(), FirstName = "Test" });
+        var pagedResult = await _repo.FindPagedAsync(1, 0);
+        Assert.Empty(pagedResult.Items);
+    }
+
+    [Fact]
+    public async Task UpdateAsyncThrowsForNonExistentEntity()
+    {
+        var person = new Person { Id = Guid.NewGuid(), FirstName = "NonExistent" };
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => _repo.UpdateAsync(person));
+    }
+
+    [Fact]
+    public async Task RemoveByIdAsyncDoesNothingForNonExistentId()
+    {
+        var id = Guid.NewGuid();
+        await _repo.RemoveByIdAsync(id);
+        Assert.True(true);
+    }
+
+    [Fact]
+    public async Task AddAsyncOverwritesExistingEntity()
+    {
+        var person = new Person { Id = Guid.NewGuid(), FirstName = "Original" };
+        await _repo.AddAsync(person);
+        person.FirstName = "Updated";
+        await _repo.AddAsync(person);
+        var result = await _repo.FindByIdAsync(person.Id);
+        Assert.Equal("Updated", result.FirstName);
     }
 }

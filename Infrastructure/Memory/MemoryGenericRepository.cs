@@ -27,7 +27,7 @@ public class MemoryGenericRepository<T>: IGenericRepositoryAsync<T>
         var all = _data.Values.ToList();
         var items = all.Skip((page - 1) * pageSize).Take(pageSize).ToList();
         var totalCount = all.Count;
-        var pagedResult = new PagedResult<T>(items, totalCount, page, pageSize);
+       var pagedResult = new PagedResult<T>((IEnumerable<T>)items, totalCount, page, pageSize);
         return Task.FromResult(pagedResult);
     }
 
