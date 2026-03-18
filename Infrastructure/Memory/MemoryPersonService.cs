@@ -60,6 +60,11 @@ public class MemoryPersonService(IContactUnitOfWork unitOfWork) : IPersonService
         };
     }
 
+    public Task<Person> AddPerson(CreatePersonDto person)
+    {
+        var entity =
+    }
+
     public async Task<PersonDto> AddPerson(PersonDto personDto)
     {
         var person = new Person
@@ -124,6 +129,11 @@ public class MemoryPersonService(IContactUnitOfWork unitOfWork) : IPersonService
         };
     }
 
+    public Task<Person> UpdatePerson(UpdatePersonDto person)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<PersonDto> UpdatePerson(Guid personId, PersonDto personDto)
     {
         var person = await unitOfWork.Persons.FindByIdAsync(personId);
@@ -184,6 +194,11 @@ public class MemoryPersonService(IContactUnitOfWork unitOfWork) : IPersonService
             Phone = updated.Phone,
             Status = updated.Status
         };
+    }
+
+    public Task<PersonDto> GetById(Guid id)
+    {
+        throw new NotImplementedException();
     }
 
     Task<PagedResult<PersonDto>> IPersonService.FindAllPeoplePaged(int page, int pageSize)
