@@ -56,6 +56,10 @@ using FluentValidation;
 	        Guid? employerId,
 	        CancellationToken ct) =>
 	        await _companyRepository.FindByIdAsync(employerId ?? Guid.Empty) is not null;
+	    
+	    
 	}
+
+	
 	
 	

@@ -1,5 +1,51 @@
-﻿@WebApi_HostAddress=http://localhost:5001
-GET {{WebApi_HostAddress}}/api/contacts
+﻿@WebApi_HostAddress=https://localhost:5000
+@personId=B9C5842A-FA13-4A1A-97EC-8B4C2420432E
+
+
+GET https://localhost:5000/api/contacts
 Accept: application/json
 
 ###
+
+
+GET {{WebApi_HostAddress}}/api/contacts/B9C5842A-FA13-4A1A-97EC-8B4C2420432E
+Accept: application/json
+
+###
+
+
+POST https://localhost:5000/api/contacts
+Content-Type: application/json
+
+{
+
+  "firstName": "Dawid",
+  "lastName" : "Nowak",
+  "email": "adam@wsei.edu.pl",
+  "phone": "48123456789"
+}
+
+###
+
+
+POST {{WebApi_HostAddress}}/api/contacts/3cce91f6-3865-4c3a-a462-dacc72297bd1/notes
+Content-Type: application/json
+
+{
+  "content": "To jest przykładowa notatka 1"
+}
+
+###
+
+
+GET {{WebApi_HostAddress}}/api/contacts/3cce91f6-3865-4c3a-a462-dacc72297bd1/notes
+Content-Type: application/json
+
+###
+
+
+DELETE {{WebApi_HostAddress}}/api/contacts/3cce91f6-3865-4c3a-a462-dacc72297bd1/notes/36e7bbc2-1969-44b6-9655-74432b99358c
+Content-Type: application/json
+
+###
+

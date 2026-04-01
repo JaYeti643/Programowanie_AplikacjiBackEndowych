@@ -27,11 +27,23 @@ public class MemoryPersonRepository : MemoryGenericRepository<Person>,IPersonRep
     //Dodawanie Person do repozytorium z losowym Guidem
     public MemoryPersonRepository() : base()
     {
-        _data.Add(Guid.NewGuid(), new Person()
+        var person1 = Guid.Parse("B9C5842A-FA13-4A1A-97EC-8B4C2420432E");
+        _data.Add(person1, new Person()
         {
-            FirstName = "Adam",
-            LastName = "Nowak",
+            FirstName = "Jakub",
+            LastName = "Kowalski",
             Gender = Gender.Male,
+            Email = "JakKo@wsei.pl",
+            BirthDate = DateTime.Today.AddYears(-20),
+            Phone = "48123456789",
+                Address = new Address()
+                {
+                    Street = "ul. Kwiatowa 1",
+                    City = "Warszawa",
+                    PostalCode = "00-001",
+                    Country = "Polska",
+                    
+                }
         });
         _data.Add(Guid.NewGuid(), new Person()
         {

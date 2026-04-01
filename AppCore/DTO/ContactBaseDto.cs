@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AppCore.Models;
 
 
@@ -34,17 +35,29 @@ public record PersonDto : ContactBaseDto
     public DateTime? BirthDate { get; init; }
     public Gender Gender { get; init; }
     public Guid? EmployerId { get; init; }
+    public string Notes { get; set; }
 
     public static PersonDto FromEntity(Person person) => new()
     {
         Id = person.Id,
         FirstName = person.FirstName,
         LastName = person.LastName,
+        Email = person.Email,
+        Phone = person.Phone,
         Position = person.Position,
         BirthDate = person.BirthDate,
         Gender = person.Gender,
         EmployerId = person.Employer?.Id,
-
+        Status = person.Status,
+        CreatedAt = person.CreatedAt,
+        Tags = person.Tags?.Select(t => t.Name).ToList() ?? new(),
+        Address = person.Address != null ? new AddressDto(
+            person.Address.Street,
+            person.Address.City,
+            person.Address.PostalCode,
+            person.Address.Country,
+            person.Address.Type
+        ) : null
     };
 
 }
@@ -92,9 +105,21 @@ public record PagedResult<T>(
     int PageSize
 )
 {
-  
+
 
     public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
     public bool HasNext => Page < TotalPages;
     public bool HasPrevious => Page > 1;
 }
+
+public record CreateNoteDto(
+    string Content,
+    string? CreatedBy = null
+);
+
+public record NoteDto(
+    Guid Id,
+    string Content,
+    DateTime CreatedAt,
+    string? CreatedBy
+);

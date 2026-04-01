@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AppCore.Exceptions;
 using AppCore.Interfaces;
 using AppCore.Models;
 
-namespace Infrastructure.Memory;
+namespace AppCore.Services;
 
-public class MemoryPersonService(IContactUnitOfWork unitOfWork) : IPersonService
+public class PersonService(IContactUnitOfWork unitOfWork) : IPersonService
 {
     public async Task<PagedResult<PersonDto>> FindAllPeoplePaged(int page, int pageSize)
     {
@@ -59,12 +60,6 @@ public class MemoryPersonService(IContactUnitOfWork unitOfWork) : IPersonService
             Status = person.Status
         };
     }
-
-    public Task<Person> AddPerson(CreatePersonDto person)
-    {
-        var entity =
-    }
-
     public async Task<PersonDto> AddPerson(PersonDto personDto)
     {
         var person = new Person
@@ -129,9 +124,38 @@ public class MemoryPersonService(IContactUnitOfWork unitOfWork) : IPersonService
         };
     }
 
-    public Task<Person> UpdatePerson(UpdatePersonDto person)
+    public async Task<Person> AddPerson(CreatePersonDto personDto)
     {
-        throw new NotImplementedException();
+        var entity = new Person
+        {
+            Id = Guid.NewGuid(),
+            FirstName = personDto.FirstName,
+            LastName = personDto.LastName,
+            Email = personDto.Email,
+            Phone = personDto.Phone,
+            Position = personDto.Position,
+            BirthDate = personDto.BirthDate,
+        };
+        entity = await unitOfWork.Persons.AddAsync(entity);
+        await unitOfWork.SaveChangesAsync();
+        return entity;
+    }
+
+    public async Task<Person> UpdatePerson(UpdatePersonDto person)
+    {
+        var entity = new Person
+        {
+            Id = Guid.NewGuid(),
+            FirstName = person.FirstName ?? "",
+            LastName = person.LastName ?? "",
+            Email = person.Email ?? "",
+            Phone = person.Phone ?? "",
+            Position = person.Position,
+            BirthDate = person.BirthDate,
+        };
+        entity = await unitOfWork.Persons.UpdateAsync(entity);
+        await unitOfWork.SaveChangesAsync();
+        return entity;
     }
 
     public async Task<PersonDto> UpdatePerson(Guid personId, PersonDto personDto)
@@ -196,13 +220,138 @@ public class MemoryPersonService(IContactUnitOfWork unitOfWork) : IPersonService
         };
     }
 
-    public Task<PersonDto> GetById(Guid id)
+    public async Task<PersonDto> GetById(Guid id)
     {
-        throw new NotImplementedException();
+        var person = await unitOfWork.Persons.FindByIdAsync(id);
+        if (person == null)
+        {
+            throw new KeyNotFoundException($"Person with id {id} not found.");
+        }
+        return new PersonDto
+        {
+            Id = person.Id,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            Email = person.Email,
+            Phone = person.Phone,
+            Status = person.Status,
+            Position = person.Position,
+            BirthDate = person.BirthDate,
+            Gender = person.Gender,
+            EmployerId = person.Employer?.Id
+        };
+    }
+
+    public async Task<Note> AddNoteToPerson(Guid personId, CreateNoteDto noteDto)
+    {
+        // Pobierz osobę o podanym id z repozytorium osób
+        var person = await unitOfWork.Persons.FindByIdAsync(personId);
+        
+        // Jeśli osoba ma wartość null to zgłoś wyjątek
+        if (person == null)
+        {
+            throw new Exception($"Person with id {personId} not found.");
+        }
+        
+        // Jeśli właściwość Notes osoby jest null to przypisz do niej nową listę
+        if (person.Notes == null)
+        {
+            person.Notes = new List<Note>();
+        }
+        
+        // Utwórz notatkę klasy Note na podstawie CreateNoteDto
+        var note = new Note()
+        {
+            Id = Guid.NewGuid(),
+            Content = noteDto.Content,
+            CreatedAt = DateTime.UtcNow,
+            CreatedBy = noteDto.CreatedBy
+        };
+        
+        // Umieść notatkę w liście Notes encji
+        person.Notes.Add(note);
+        
+        // Wywołaj metodę aktualizacji encji na repozytorium osób
+        await unitOfWork.Persons.UpdateAsync(person);
+        
+        // Wywołaj metodę SaveChangesAsync z UnitOfWork
+        await unitOfWork.SaveChangesAsync();
+        
+        // Zwróć encję notatki
+        return note;
+    }
+
+    public async Task<PersonDto> GetPerson(Guid personId)
+    {
+        var person = await unitOfWork.Persons.FindByIdAsync(personId);
+        if (person == null)
+        {
+            throw new KeyNotFoundException($"Perssdsdsdsdsdsdsdsdon with id {personId} not found.");
+        }
+        
+        return new PersonDto
+        {
+            Id = person.Id,
+            FirstName = person.FirstName,
+            LastName = person.LastName,
+            Email = person.Email,
+            Phone = person.Phone,
+            Status = person.Status,
+            Position = person.Position,
+            BirthDate = person.BirthDate,
+            Gender = person.Gender,
+            EmployerId = person.Employer?.Id
+        };
+    }
+
+    public async Task<List<Note>> GetNotesForPerson(Guid personId)
+    {
+        var person = await unitOfWork.Persons.FindByIdAsync(personId);
+        if (person == null)
+        {
+            throw new ContactNotFoundException($"Person with id={personId} not found!");
+        }
+        
+        return person.Notes ?? new List<Note>();
+    }
+
+    public async Task<bool> DeleteNote(Guid personId, Guid noteId)
+    {
+        // Pobierz osobę o podanym id
+        var person = await unitOfWork.Persons.FindByIdAsync(personId);
+        if (person == null)
+        {
+            throw new ContactNotFoundException($"Person with id={personId} not found!");
+        }
+        
+        // Sprawdź czy osoba ma notatki
+        if (person.Notes == null || person.Notes.Count == 0)
+        {
+            throw new Exception($"Person with id={personId} has no notes!");
+        }
+        
+        // Znajdź notatkę do usunięcia
+        var note = person.Notes.FirstOrDefault(n => n.Id == noteId);
+        if (note == null)
+        {
+            throw new Exception($"Note with id={noteId} not found for person with id={personId}!");
+        }
+        
+        // Usuń notatkę z listy
+        person.Notes.Remove(note);
+        
+        // Zaktualizuj encję osoby
+        await unitOfWork.Persons.UpdateAsync(person);
+        
+        // Zapisz zmiany
+        await unitOfWork.SaveChangesAsync();
+        
+        return true;
     }
 
     Task<PagedResult<PersonDto>> IPersonService.FindAllPeoplePaged(int page, int pageSize)
     {
         return FindAllPeoplePaged(page, pageSize);
     }
+    
 }

@@ -4,24 +4,30 @@ using Microsoft.Extensions.Hosting;
 using AppCore.Interfaces;
 using Infrastructure.Memory;
 using AppCore.Models;
+using AppCore.Module;
+using AppCore.Services;
+using FluentValidation.AspNetCore;
+using Infrastructure;
+
+namespace WebApi;
 
 public class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
-        builder.Services.AddControllers();            
+        builder.Services.AddAuthorization();
+        builder.Services.AddContactsEfModule(builder.Configuration);
+        builder.Services.AddContactsCoreModule(builder.Configuration);
+        builder.Services.AddControllers();
+        builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();    
+        builder.Services.AddProblemDetails();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddSingleton<IPersonRepositoryAsync, MemoryPersonRepository>();
-        builder.Services.AddSingleton<ICompanyRepositoryAsync, MemoryCompanyRepository>();
-        builder.Services.AddSingleton<IOrganizationRepositoryAsync, MemoryOrganizationRepository>();
-        builder.Services.AddSingleton<IContactUnitOfWork, MemoryContactUnitOfWork>();
-        builder.Services.AddSingleton<IPersonService, MemoryPersonService>();
 
         var app = builder.Build();
-
+        app.UseExceptionHandler(); // ta warstwa musi być przed mapowaniem kontrolerów
+        app.MapControllers();
        
         if (app.Environment.IsDevelopment())
         {
