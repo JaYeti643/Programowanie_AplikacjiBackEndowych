@@ -135,7 +135,24 @@ public class PersonService(IContactUnitOfWork unitOfWork) : IPersonService
             Phone = personDto.Phone,
             Position = personDto.Position,
             BirthDate = personDto.BirthDate,
+            Gender = personDto.Gender,
+            Status = ContactStatus.Active,
+            CreatedAt = DateTime.UtcNow,
+            Tags = new List<Tag>(),
+            Notes = new List<Note>(),
+            Address = personDto.Address != null ? new Address
+            {
+                Street = personDto.Address.Street,
+                City = personDto.Address.City,
+                PostalCode = personDto.Address.PostalCode,
+                Country = personDto.Address.Country,
+                Type = personDto.Address.Type
+            } : new Address()
         };
+        if (personDto.EmployerId.HasValue)
+        {
+            entity.Employer = await unitOfWork.Companies.FindByIdAsync(personDto.EmployerId.Value);
+        }
         entity = await unitOfWork.Persons.AddAsync(entity);
         await unitOfWork.SaveChangesAsync();
         return entity;

@@ -6,24 +6,29 @@ namespace Infrastructure.EntityFramework.UnitOfWork;
 
 public class EfContactsUnitOfWork(
     IPersonRepositoryAsync personRepository,
+    ICompanyRepositoryAsync companyRepository,
+    IOrganizationRepositoryAsync organizationRepository,
     // pozostałe repozytoria
     ContactsDbContext context
 ): IContactUnitOfWork
 {
-    private IPersonRepositoryAsync _persons;
+    private IPersonRepositoryAsync _persons = personRepository;
+    private ICompanyRepositoryAsync _companies = companyRepository;
+    private IOrganizationRepositoryAsync _organizations = organizationRepository;
 
     public ValueTask DisposeAsync()
     {
         return context.DisposeAsync();
     }
 	
-    public IPersonRepositoryAsync Persons => personRepository;
 
-    public ICompanyRepositoryAsync Companies { get; }
-    public IOrganizationRepositoryAsync Organizations { get; }
+    // public ICompanyRepositoryAsync Companies { get; }
+    // public IOrganizationRepositoryAsync Organizations { get; }
 
     // właściwości pozostałych repozytoriów
     IPersonRepositoryAsync IContactUnitOfWork.Persons => _persons;
+    ICompanyRepositoryAsync IContactUnitOfWork.Companies => _companies;
+    IOrganizationRepositoryAsync IContactUnitOfWork.Organizations => _organizations;
 
     public Task<int> SaveChangesAsync()
     {

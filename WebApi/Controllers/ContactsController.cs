@@ -69,10 +69,11 @@ public class ContactsController(IPersonService service): ControllerBase
         
         
             var note = await service.AddNoteToPerson(contactId, dto);
+            var noteDto = new NoteDto(note.Id, note.Content, note.CreatedAt, note.CreatedBy);
             return CreatedAtAction(
                 nameof(GetNotes),
                 new { contactId },
-                note);
+                noteDto);
         
       
     }

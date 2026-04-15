@@ -1,8 +1,8 @@
-﻿@WebApi_HostAddress=https://localhost:5000
-@personId=B9C5842A-FA13-4A1A-97EC-8B4C2420432E
+﻿@WebApi_HostAddress=https://localhost:5002
 
 
-GET https://localhost:5000/api/contacts
+
+GET https://localhost:5002/api/contacts
 Accept: application/json
 
 ###
@@ -14,21 +14,22 @@ Accept: application/json
 ###
 
 
-POST https://localhost:5000/api/contacts
+POST https://localhost:5002/api/contacts
 Content-Type: application/json
 
 {
 
-  "firstName": "Dawid",
-  "lastName" : "Nowak",
-  "email": "adam@wsei.edu.pl",
-  "phone": "48123456789"
+  "firstName": "Karolina",
+  "lastName" : "Pruszkowska",
+  "email": "Karo@wsei.edu.pl",
+  "phone": "48123456789",
+  "gender": "Female"
 }
 
 ###
 
 
-POST {{WebApi_HostAddress}}/api/contacts/3cce91f6-3865-4c3a-a462-dacc72297bd1/notes
+POST https://localhost:5002/api/contacts/4A5D8B43-0099-4CB6-A57E-393F2C185E86/notes
 Content-Type: application/json
 
 {
@@ -44,8 +45,7 @@ Content-Type: application/json
 ###
 
 
-DELETE {{WebApi_HostAddress}}/api/contacts/3cce91f6-3865-4c3a-a462-dacc72297bd1/notes/36e7bbc2-1969-44b6-9655-74432b99358c
+DELETE {{WebApi_HostAddress}}/api/contacts/4A5D8B43-0099-4CB6-A57E-393F2C185E86
 Content-Type: application/json
 
 ###
-

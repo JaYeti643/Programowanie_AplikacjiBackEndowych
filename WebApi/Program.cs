@@ -6,8 +6,13 @@ using Infrastructure.Memory;
 using AppCore.Models;
 using AppCore.Module;
 using AppCore.Services;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure;
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace WebApi;
 
@@ -16,10 +21,18 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddDbContext<ContactsDbContext>(Options => Options.UseSqlite(builder.Configuration.GetConnectionString("CrmDb")));
+        //builder.Services.AddDbContext<Note>(Options=> Options.UseSqlite(builder.Configuration.GetConnectionString("CrmDb")));
         builder.Services.AddAuthorization();
         builder.Services.AddContactsEfModule(builder.Configuration);
         builder.Services.AddContactsCoreModule(builder.Configuration);
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+        builder.Services.AddFluentValidationAutoValidation();
+        builder.Services.AddValidatorsFromAssemblyContaining<CreatePersonDtoValidator>();
         builder.Services.AddExceptionHandler<ProblemDetailsExceptionHandler>();    
         builder.Services.AddProblemDetails();
         builder.Services.AddSwaggerGen();

@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCore.Interfaces;
@@ -18,8 +18,9 @@ using FluentValidation;
 	            .Matches(@"^[\p{L}\s\-]+$").WithMessage("Imię zawiera niedozwolone znaki.");
 	        // dodaj regułę dla LastName, maksymalnie 200 znaków, niedozwolen znaki jak w FirstName
 	        RuleFor(x => x.LastName)
+		        .NotEmpty().WithMessage("Nazwisko jest wymagane.")
 		        .MaximumLength(200).WithMessage("Nazwisko nie może przekraczać 200 znaków.")
-		        .Matches(@"^[\p{L}\s\-]+$").WithMessage("Imię zawiera niedozwolone znaki.");
+		        .Matches(@"^[\p{L}\s\-]+$").WithMessage("Nazwisko zawiera niedozwolone znaki.");
 	        RuleFor(x => x.Email)
 	            .NotEmpty().WithMessage("Email jest wymagany.")
 	            .EmailAddress().WithMessage("Nieprawidłowy format adresu email.")

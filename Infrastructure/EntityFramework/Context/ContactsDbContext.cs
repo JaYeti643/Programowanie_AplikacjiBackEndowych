@@ -1,8 +1,10 @@
 ﻿using System;
+using System.IO;
 using AppCore.Models;
 using Infrastructure.EntityFramework.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 public class ContactsDbContext: IdentityDbContext<CrmUser, CrmRole, string>
 {
@@ -10,11 +12,6 @@ public class ContactsDbContext: IdentityDbContext<CrmUser, CrmRole, string>
     public DbSet<Person> People { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Organization> Organizations { get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlite("Data Source=CrmDb.db");
-    }
 
     public ContactsDbContext()
     {
@@ -22,6 +19,18 @@ public class ContactsDbContext: IdentityDbContext<CrmUser, CrmRole, string>
 
     public ContactsDbContext(DbContextOptions<ContactsDbContext> options) :
         base(options) { }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            optionsBuilder.UseSqlite(config.GetConnectionString("CrmDb"));
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
