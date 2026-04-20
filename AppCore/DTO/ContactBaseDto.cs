@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppCore;
 using AppCore.Models;
 using System.Text.Json.Serialization;
 
@@ -124,3 +125,37 @@ public record NoteDto(
     DateTime CreatedAt,
     string? CreatedBy
 );
+
+
+public record LoginDto
+{
+    public string Email { get; init; } = string.Empty;
+    public string Password { get; init; } = string.Empty;
+}
+	
+public record AuthResponseDto
+{
+    public string AccessToken { get; init; } = string.Empty;
+    public string RefreshToken { get; init; } = string.Empty;
+    public DateTime ExpiresAt { get; init; }
+    public UserDto User { get; init; } = null!;
+}
+	
+	
+public record RefreshTokenDto(
+    string AccessToken,
+    string RefreshToken
+);
+
+public record UserDto
+{
+    public string Id { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string FirstName { get; init; } = string.Empty;
+    public string LastName { get; init; } = string.Empty;
+    public string FullName { get; init; } = string.Empty;
+    public string Department { get; init; } = string.Empty;
+    public List<string> Roles { get; init; } = new();
+    public SystemUserStatus Status { get; init; }
+    public DateTime CreatedAt { get; init; }
+}

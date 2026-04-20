@@ -2,6 +2,7 @@
 using System.IO;
 using AppCore.Models;
 using Infrastructure.EntityFramework.Entities;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,8 @@ public class ContactsDbContext: IdentityDbContext<CrmUser, CrmRole, string>
     public DbSet<Person> People { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<Organization> Organizations { get; set; }
+    
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public ContactsDbContext()
     {

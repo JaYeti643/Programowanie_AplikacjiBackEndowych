@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AppCore.Authorization;
 using AppCore.Interfaces;
 using AppCore.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,8 +16,11 @@ public class ContactsController(IPersonService service): ControllerBase
 {
 
     [HttpGet]
+    [Authorize(Policy = nameof(CrmPolicies.ReadOnlyAccess))]
     public  async Task<IActionResult> GetAllPersons(int page = 1, int size = 10)
     {
+        var people = await service.FindAllPeoplePaged(page, size);
+
         return Ok(await service.FindAllPeoplePaged(page, size));
     }
     [HttpGet("{id:guid}")]

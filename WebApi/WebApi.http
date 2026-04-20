@@ -4,7 +4,7 @@
 
 GET https://localhost:5002/api/contacts
 Accept: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBjcm0uY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlNhbGVzIiwianRpIjoiOTlmYjE1ODAtNDdiZS00YWMwLWI5MjItYTc1NmJiNjVmNTRkIiwiaWF0IjoiMTc3NjY4NjYxNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlNhbGVzTWFuYWdlciIsIm5iZiI6MTc3NjY4NjYxNSwiZXhwIjoxNzc2NjkwMjE1LCJpc3MiOiJJZGVpc0NybUFwaSIsImF1ZCI6IkNybUNsaWVudCJ9.rxsuDl957jFhrjpB4FGAA0mbdHhvbPsS-BNREwp70u4
 ###
 
 
@@ -45,7 +45,15 @@ Content-Type: application/json
 ###
 
 
-DELETE {{WebApi_HostAddress}}/api/contacts/4A5D8B43-0099-4CB6-A57E-393F2C185E86
+DELETE https://localhost:5002/api/contacts/844bf2a4-b62e-4870-8347-a8b96ddbb988
 Content-Type: application/json
 
 ###
+POST https://localhost:5002/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "jan.kowalski@crm.com",
+  "password": "Manager@123!"
+}
+

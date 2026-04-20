@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using AppCore;
 using Microsoft.AspNetCore.Identity;
 
@@ -9,7 +9,6 @@ public class CrmUser : IdentityUser, ISystemUser
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string FullName { get; set; }
-    public required string Email { get; set; }
     public required string Department { get; set; }
     public required SystemUserStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
