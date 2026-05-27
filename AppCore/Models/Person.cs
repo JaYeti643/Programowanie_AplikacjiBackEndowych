@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AppCore.Models;
 
@@ -13,7 +14,21 @@ public class Person : Contact
     public Organization? Organization { get; set; }
     public Company? Employer { get; set; }
     
-    
+    public void AssignEmployer(Company employer)
+    {
+        Employer = employer;
+
+        if (employer.Employees == null)
+        {
+            employer.Employees = new List<Person>();
+        }
+
+        if (!employer.Employees.Contains(this))
+        {
+            employer.Employees.Add(this);
+        }
+    }
+
     
     
     public override string GetDisplayName()
