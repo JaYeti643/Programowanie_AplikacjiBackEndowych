@@ -1,6 +1,111 @@
 ﻿@WebApi_HostAddress=https://localhost:5002
 
+###
 
+### GET all companies 
+GET {{WebApi_HostAddress}}/api/companies?page=1&pageSize=10
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkzQTdGRkRELTA1N0YtNDAyMS05QzY4LUZFMDY5NTFGRkE2NSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6Imphbi5rb3dhbHNraUBjcm0uY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiSmFuIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvc3VybmFtZSI6Iktvd2Fsc2tpIiwiZGVwYXJ0bWVudCI6IlNhbGVzIiwianRpIjoiODdlM2I0ZTQtOTAzYy00Y2I3LTk0ODEtZDJmMmY4ZDliMWE0IiwiaWF0IjoiMTc3OTk5NTA5NCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlNhbGVzTWFuYWdlciIsIm5iZiI6MTc3OTk5NTA5NCwiZXhwIjoxNzc5OTk4Njk0LCJpc3MiOiJJZGVpc0NybUFwaSIsImF1ZCI6IkNybUNsaWVudCJ9.5Q5EfFaZfunJl8ErCayweJU2P7oUt109VQnjUgE1uMw
+
+###
+
+### GET company by ID
+GET {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0
+Accept: application/json
+
+###
+
+### CREATE new company
+POST {{WebApi_HostAddress}}/api/companies
+Content-Type: application/json
+
+{
+  "name": "Google Poland",
+  "nip": "3010000003",
+  "regon": "140000001",
+  "krs": "0000123456",
+  "industry": "Software Development",
+  "employeeCount": 1000,
+  "annualRevenue": 10000000000.00,
+  "website": "https://google.pl",
+  "email": "contact@google.pl",
+  "phone": "48-12-123-45-67",
+  "address": {
+    "street": "ul. Prosta 51",
+    "city": "Kraków",
+    "postalCode": "00-025",
+    "country": "Poland",
+    "type": "Main"
+  }
+}
+
+###
+
+### UPDATE company
+PUT {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0
+Content-Type: application/json
+
+{
+  "name": "Tech Corp Poland Updated",
+  "industry": "Enterprise Software",
+  "employeeCount": 100,
+  "annualRevenue": 750052000.00
+}
+
+###
+
+### DELETE company
+DELETE {{WebApi_HostAddress}}/api/companies/aa758468-5749-445a-b971-53283ead3478
+Accept: application/json
+
+###
+
+### SEARCH: Find companies by name
+GET {{WebApi_HostAddress}}/api/companies/search/name?nameOrPart=G
+Accept: application/json
+
+###
+
+### SEARCH: Find company by NIP
+GET {{WebApi_HostAddress}}/api/companies/search/nip?nip=3010000003
+Accept: application/json
+###
+
+### GET all employees of company (with filtering and sorting)
+GET {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0/employees?sortBy=LastName&descending=false
+Accept: application/json
+
+###
+
+### GET employees with filters
+GET {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0/employees?lastName=Dro
+Accept: application/json
+
+###
+
+### SEARCH employees by criteria
+GET {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0/employees/search?firstName=Karol
+Accept: application/json
+
+###
+
+### ADD employee to company
+POST {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0/employees/698c7930-cf0f-4131-901d-df998ea38caa
+Accept: application/json
+
+###
+
+### REMOVE employee from company
+DELETE {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0/employees/c1bd7569-fc86-484d-8720-b172c6e4f406
+Accept: application/json
+
+###
+
+### GET employee count for company
+GET {{WebApi_HostAddress}}/api/companies/c63dae88-7f8d-4c53-a98f-7dc197dfb7e0/employees/count
+Accept: application/json
+
+###
 
 GET https://localhost:5002/api/contacts
 Accept: application/json
@@ -19,11 +124,11 @@ Content-Type: application/json
 
 {
 
-  "firstName": "Karolina",
-  "lastName" : "Pruszkowska",
-  "email": "Karo@wsei.edu.pl",
+  "firstName": "Dawid",
+  "lastName" : "Drożdż",
+  "email": "Dawi@wsei.edu.pl",
   "phone": "48123456789",
-  "gender": "Female"
+  "gender": "Male"
 }
 
 ###
@@ -45,7 +150,7 @@ Content-Type: application/json
 ###
 
 
-DELETE https://localhost:5002/api/contacts/844bf2a4-b62e-4870-8347-a8b96ddbb988
+DELETE https://localhost:5002/api/contacts/b01f239e-9fe4-449a-830a-165eb960b102
 Content-Type: application/json
 
 ###

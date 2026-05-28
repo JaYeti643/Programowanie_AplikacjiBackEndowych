@@ -48,7 +48,6 @@ public class ContactsController(IPersonService service): ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdatePerson(Guid id, UpdatePersonDto dto)
     {
-        
         try
         {
             await service.GetById(id);
@@ -58,8 +57,7 @@ public class ContactsController(IPersonService service): ControllerBase
             return NotFound();
         }
 
-     
-        var updatedPerson = await service.UpdatePerson(dto);
+        var updatedPerson = await service.UpdatePerson( dto); 
         var personDto = PersonDto.FromEntity(updatedPerson);
         return Ok(personDto);
     }

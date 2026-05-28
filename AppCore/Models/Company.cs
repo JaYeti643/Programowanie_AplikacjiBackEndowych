@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace AppCore.Models;
 
 public class Company : Contact
@@ -16,6 +16,7 @@ public class Company : Contact
     public string Website { get; set; }
     public List<Person> Employees { get; set; }
     public Person PrimaryContact { get; set; }
+    [NotMapped]
     public Person Employer { get; set; }
 
     public Company()
