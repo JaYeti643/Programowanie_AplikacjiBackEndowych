@@ -14,9 +14,8 @@ namespace WebApi.Controllers;
 [Route("api/companies")]
 public class CompanyController(ICompanyService service) : ControllerBase
 {
-    /// <summary>
     /// Get all companies with pagination
-    /// </summary>
+    ///
     [HttpGet]
     [Authorize(Policy = nameof(CrmPolicies.ReadOnlyAccess))]
     [ProducesResponseType(typeof(PagedResult<CompanyDto>), StatusCodes.Status200OK)]
@@ -26,9 +25,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
+    /// 
     /// Get company by ID
-    /// </summary>
+    /// 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -45,9 +44,7 @@ public class CompanyController(ICompanyService service) : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Create a new company
-    /// </summary>
+ 
     [HttpPost]
     [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -64,9 +61,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         }
     }
 
-    /// <summary>
+    /// 
     /// Update company
-    /// </summary>
+    /// 
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -88,9 +85,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         }
     }
 
-    /// <summary>
+    /// 
     /// Delete company
-    /// </summary>
+    /// 
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -107,9 +104,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         }
     }
 
-    /// <summary>
+    /// 
     /// Search companies by name
-    /// </summary>
+    ///
     [HttpGet("search/name")]
     [ProducesResponseType(typeof(IEnumerable<CompanyDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SearchByName([FromQuery] string nameOrPart)
@@ -118,9 +115,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         return Ok(results);
     }
 
-    /// <summary>
+    /// 
     /// Find company by NIP
-    /// </summary>
+    /// 
     [HttpGet("search/nip")]
     [ProducesResponseType(typeof(CompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -132,9 +129,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         return Ok(company);
     }
 
-    /// <summary>
+    /// 
     /// Get all employees of a company with optional filtering and sorting
-    /// </summary>
+    /// 
     [HttpGet("{companyId:guid}/employees")]
     [ProducesResponseType(typeof(List<PersonDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -167,9 +164,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         }
     }
 
-    /// <summary>
+    /// 
     /// Search employees by criteria
-    /// </summary>
+    /// 
     [HttpGet("{companyId:guid}/employees/search")]
     [ProducesResponseType(typeof(List<PersonDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -194,7 +191,7 @@ public class CompanyController(ICompanyService service) : ControllerBase
         }
     }
 
-    /// <summary>
+    /// 
     /// Add an employee to company
     /// </summary>
     [HttpPost("{companyId:guid}/employees/{personId:guid}")]
@@ -242,9 +239,9 @@ public class CompanyController(ICompanyService service) : ControllerBase
         }
     }
 
-    /// <summary>
+    ///
     /// Get employee count for a company
-    /// </summary>
+    ///
     [HttpGet("{companyId:guid}/employees/count")]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

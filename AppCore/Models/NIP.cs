@@ -8,7 +8,7 @@ namespace AppCore.Models
     {
         public string Value { get; }
 
-        // ── Konstruktor ──────────────────────────────────────────────────────────
+      
         public NIP(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -22,7 +22,7 @@ namespace AppCore.Models
             Value = sanitized;
         }
 
-        // ── Statyczne metody pomocnicze ──────────────────────────────────────────
+
 
         /// <summary>Usuwa myślniki, spacje i inne znaki niebędące cyframi.</summary>
         public static string Sanitize(string nip)
@@ -55,12 +55,12 @@ namespace AppCore.Models
             return controlDigit == (nip[9] - '0');
         }
 
-        // ── Metody domenowe ──────────────────────────────────────────────────────
 
-        /// <summary>Zwraca trzycyfrowy prefiks identyfikujący urząd skarbowy.</summary>
+
+        /// wraca trzycyfrowy prefiks identyfikujący urząd skarbowy.
         public string GetTaxOfficeNumber() => Value.Substring(0, 3);
 
-        /// <summary>Zwraca pełną nazwę urzędu skarbowego na podstawie prefiksu.</summary>
+        /// Zwraca pełną nazwę urzędu skarbowego na podstawie prefiksu.
         public string GetTaxOfficeName()
         {
             return TaxOfficePrefixes.TryGetValue(GetTaxOfficeNumber(), out var name)
@@ -68,16 +68,15 @@ namespace AppCore.Models
                 : $"Nieznany urząd skarbowy (prefiks: {GetTaxOfficeNumber()})";
         }
 
-        // ── Formatowanie ─────────────────────────────────────────────────────────
+     
 
-        /// <summary>Zwraca NIP w formacie XXX-XXX-XX-XX.</summary>
+        /// >Zwraca NIP w formacie XXX-XXX-XX-XX.
         public string ToFormattedString()
             => $"{Value[..3]}-{Value[3..6]}-{Value[6..8]}-{Value[8..10]}";
 
         public override string ToString() => Value;
 
-        // ── Równość (ValueObject) ────────────────────────────────────────────────
-
+        
         public bool Equals(NIP? other) => other is not null && Value == other.Value;
 
         public override bool Equals(object? obj) => obj is NIP other && Equals(other);
@@ -89,7 +88,7 @@ namespace AppCore.Models
 
         public static bool operator !=(NIP? left, NIP? right) => !(left == right);
 
-        // ── Słownik urzędów skarbowych ───────────────────────────────────────────
+       
 
         private static readonly Dictionary<string, string> TaxOfficePrefixes = new()
         {

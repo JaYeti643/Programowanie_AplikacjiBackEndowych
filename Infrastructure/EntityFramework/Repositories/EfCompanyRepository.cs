@@ -12,6 +12,12 @@ public class EfCompanyRepository(ContactsDbContext context) :
     EfGenericRepository<Company>(context.Companies), 
     ICompanyRepositoryAsync
 {
+    public new async Task<Company?> FindByIdAsync(Guid id)
+    {
+        return await context.Companies
+            .Include(c => c.Employees) // <-- to było brakujące
+            .FirstOrDefaultAsync(c => c.Id == id);
+    }
     public async Task<Company?> FindByNipAsync(string nip)
     {
         return await context.Companies.FirstOrDefaultAsync(c => c.NIP == nip);
