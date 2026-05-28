@@ -64,7 +64,6 @@ public record PersonDto : ContactBaseDto
 
 }
 
-
 public record CreatePersonDto(
     string FirstName,
     string LastName,
@@ -159,3 +158,97 @@ public record UserDto
     public SystemUserStatus Status { get; init; }
     public DateTime CreatedAt { get; init; }
 }
+
+// --- Company ---
+public record CompanyDto : ContactBaseDto
+{
+    public string Name { get; init; }
+    public string NIP { get; init; }
+    public string REGON { get; init; }
+    public string KRS { get; init; }
+    public string Industry { get; init; }
+    public int EmployeeCount { get; init; }
+    public decimal? AnnualRevenue { get; init; }
+    public string Website { get; init; }
+    public List<PersonDto> Employees { get; init; } = new();
+    public Guid? PrimaryContactId { get; init; }
+
+    public static CompanyDto FromEntity(Company company) => new()
+    {
+        Id = company.Id,
+        Name = company.Name,
+        NIP = company.NIP,
+        REGON = company.REGON,
+        KRS = company.KRS,
+        Industry = company.Industry,
+        EmployeeCount = company.EmployeeCount,
+        AnnualRevenue = company.AnnualRevenue,
+        Website = company.Website,
+        Email = company.Email,
+        Phone = company.Phone,
+        Status = company.Status,
+        CreatedAt = company.CreatedAt,
+        Tags = company.Tags?.Select(t => t.Name).ToList() ?? new(),
+        Employees = company.Employees?.Select(e => new PersonDto
+        {
+            Id = e.Id,
+            FirstName = e.FirstName,
+            LastName = e.LastName,
+            Email = e.Email,
+            Phone = e.Phone,
+            Position = e.Position,
+            BirthDate = e.BirthDate,
+            Gender = e.Gender,
+            Status = e.Status,
+            CreatedAt = e.CreatedAt,
+            EmployerId = e.Employer?.Id
+        }).ToList() ?? new(),
+        PrimaryContactId = company.PrimaryContact?.Id,
+        Address = company.Address != null ? new AddressDto(
+            company.Address.Street,
+            company.Address.City,
+            company.Address.PostalCode,
+            company.Address.Country,
+            company.Address.Type
+        ) : null
+    };
+}
+
+public record CreateCompanyDto(
+    string Name,
+    string NIP,
+    string REGON,
+    string KRS,
+    string Industry,
+    int EmployeeCount,
+    decimal? AnnualRevenue,
+    string Website,
+    string Email,
+    string Phone,
+    AddressDto? Address
+);
+
+public record UpdateCompanyDto(
+    string? Name,
+    string? NIP,
+    string? REGON,
+    string? KRS,
+    string? Industry,
+    int? EmployeeCount,
+    decimal? AnnualRevenue,
+    string? Website,
+    string? Email,
+    string? Phone,
+    AddressDto? Address,
+    ContactStatus? Status
+);
+
+public record GetCompanyEmployeesDto(
+    string? FirstName = null,
+    string? LastName = null,
+    string? Position = null,
+    DateTime? HiredFrom = null,
+    DateTime? HiredTo = null,
+    EmployeeSortBy? SortBy = null,
+    bool Descending = false
+);
