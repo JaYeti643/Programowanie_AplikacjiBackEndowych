@@ -47,6 +47,7 @@ public static class ContactsInfrastructureModule
             .AddEntityFrameworkStores<ContactsDbContext>()
             .AddDefaultTokenProviders();
         services.AddScoped<IPersonService, PersonService>();
+        services.AddScoped<ICompanyService, CompanyService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IDataSeeder, IdentityDbSeeder>();
         services.AddScoped<IDataSeeder, PersonSeeder>();
@@ -61,6 +62,7 @@ public static class ContactsInfrastructureModule
         services.AddSingleton<IOrganizationRepositoryAsync, MemoryOrganizationRepository>();
         services.AddSingleton<IContactUnitOfWork, MemoryContactUnitOfWork>();
         services.AddSingleton<IPersonService, PersonService>();
+        services.AddSingleton<ICompanyService, CompanyService>();
         return services;
     }
     
