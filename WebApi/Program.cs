@@ -26,7 +26,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddDbContext<ContactsDbContext>(Options => Options.UseSqlite(builder.Configuration.GetConnectionString("CrmDb")));
-        //builder.Services.AddDbContext<Note>(Options=> Options.UseSqlite(builder.Configuration.GetConnectionString("CrmDb")));
         builder.Services.AddAuthorization();
         builder.Services.AddContactsEfModule(builder.Configuration);
         builder.Services.AddContactsCoreModule(builder.Configuration);

@@ -14,8 +14,7 @@ public class MemoryCompanyRepository : MemoryGenericRepository<Company>, ICompan
         var result = _data.Values.Where(c => !string.IsNullOrWhiteSpace(c.Name) && c.Name.Contains(nameOrPart ?? string.Empty, StringComparison.OrdinalIgnoreCase));
         return Task.FromResult(result);
     }
-
-    // Returns company matching provided NIP (sanitized)
+    
     public Task<Company?> FindByNipAsync(string nip)
     {
         if (string.IsNullOrWhiteSpace(nip)) return Task.FromResult<Company?>(null);
@@ -24,8 +23,7 @@ public class MemoryCompanyRepository : MemoryGenericRepository<Company>, ICompan
         var company = _data.Values.FirstOrDefault(c => !string.IsNullOrWhiteSpace(c.NIP) && NIP.Sanitize(c.NIP) == sanitized);
         return Task.FromResult(company);
     }
-
-    // Returns employees of the company (if present)
+    
     public Task<IEnumerable<Person>> FindEmployeesAsync(Guid companyId)
     {
         var company = _data.TryGetValue(companyId, out var c) ? c : null;

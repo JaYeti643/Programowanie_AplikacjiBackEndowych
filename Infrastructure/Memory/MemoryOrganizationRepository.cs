@@ -17,7 +17,6 @@ public class MemoryOrganizationRepository : MemoryGenericRepository<Organization
 
     public Task<IEnumerable<Person>> GetMembersAsync(Guid organizationId)
     {
-        // Assuming organizations have members, but since not implemented, return empty
         return Task.FromResult(Enumerable.Empty<Person>());
     }
 }

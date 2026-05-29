@@ -7,20 +7,16 @@ namespace AppCore.Interfaces;
 
 public interface ICompanyService
 {
-    // CRUD Operations
     Task<CompanyDto> CreateCompanyAsync(CreateCompanyDto dto);
     Task<CompanyDto> GetCompanyByIdAsync(Guid id);
     Task<CompanyDto> UpdateCompanyAsync(Guid id, UpdateCompanyDto dto);
     Task<bool> DeleteCompanyAsync(Guid id);
     
-    // Get all companies
     Task<PagedResult<CompanyDto>> GetAllCompaniesAsync(int page = 1, int pageSize = 10);
     
-    // Search operations
     Task<IEnumerable<CompanyDto>> SearchByNameAsync(string nameOrPart);
     Task<CompanyDto?> FindByNipAsync(string nip);
     
-    // Employee operations
     Task<List<PersonDto>> GetEmployeesAsync(
         Guid companyId,
         string? firstName = null,
@@ -40,7 +36,6 @@ public interface ICompanyService
     Task AddEmployeeAsync(Guid companyId, Guid personId);
     Task RemoveEmployeeAsync(Guid companyId, Guid personId);
     
-    // Employee count and statistics
     Task<int> GetEmployeeCountAsync(Guid companyId);
 }
 

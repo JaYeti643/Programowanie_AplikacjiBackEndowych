@@ -13,8 +13,7 @@ public class CompanyService(IContactUnitOfWork unitOfWork) : ICompanyService
     {
         if (string.IsNullOrWhiteSpace(dto.Name))
             throw new ArgumentException("Company name is required.");
-
-        // Validate NIP if provided
+        
         if (!string.IsNullOrWhiteSpace(dto.NIP) && !NIP.IsValid(dto.NIP))
             throw new ArgumentException($"Invalid NIP format: {dto.NIP}");
 
@@ -66,8 +65,7 @@ public class CompanyService(IContactUnitOfWork unitOfWork) : ICompanyService
         var company = await unitOfWork.Companies.FindByIdAsync(id);
         if (company == null)
             throw new KeyNotFoundException($"Company with id {id} not found.");
-
-        // Update only provided fields
+        
         if (!string.IsNullOrEmpty(dto.Name))
             company.Name = dto.Name;
         
@@ -130,8 +128,7 @@ public class CompanyService(IContactUnitOfWork unitOfWork) : ICompanyService
         var company = await unitOfWork.Companies.FindByIdAsync(id);
         if (company == null)
             throw new KeyNotFoundException($"Company with id {id} not found.");
-
-        // Remove all employees from company
+        
         if (company.Employees != null && company.Employees.Count > 0)
         {
             foreach (var employee in company.Employees.ToList())
